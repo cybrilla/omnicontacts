@@ -41,9 +41,19 @@ describe OmniContacts::HTTPUtils do
       OmniContacts::HTTPUtils.host_url_from_rack_env(env).should eq("http://localhost:8080")
     end
 
+    it "should calculate the host url using the HTTP_HOST variable in subpath deployments" do
+      env = {"rack.url_scheme" => "http", "HTTP_HOST" => "localhost:8080", "SERVER_NAME" => "localhost", "SERVER_PORT" => 8080, "SCRIPT_NAME" => "/subpath"}
+      OmniContacts::HTTPUtils.host_url_from_rack_env(env).should eq("http://localhost:8080/subpath")
+    end
+
     it "should calculate the host url using SERVER_NAME and SERVER_PORT variables" do
       env = {"rack.url_scheme" => "http", "SERVER_NAME" => "localhost", "SERVER_PORT" => 8080}
       OmniContacts::HTTPUtils.host_url_from_rack_env(env).should eq("http://localhost:8080")
+    end
+
+    it "should calculate the host url using SERVER_NAME and SERVER_PORT variables in subpath deployments" do
+      env = {"rack.url_scheme" => "http", "SERVER_NAME" => "localhost", "SERVER_PORT" => 8080, "SCRIPT_NAME" => "/subpath"}
+      OmniContacts::HTTPUtils.host_url_from_rack_env(env).should eq("http://localhost:8080/subpath")
     end
   end
 

@@ -37,6 +37,7 @@ module OmniContacts
     def host_url_from_rack_env env
       port = ((env["SERVER_PORT"] == 80) && "") || ":#{env['SERVER_PORT']}"
       host = (env["HTTP_HOST"]) || (env["SERVER_NAME"] + port)
+      host = host + env["SCRIPT_NAME"] unless env["SCRIPT_NAME"].nil?
       "#{scheme(env)}://#{host}"
     end
 
